@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Management System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🎓</span>
+        <span class="logo-text">Student Management System</span>
+      </div>
+      <!-- Updated by checkHealth() in script.js -->
+      <div id="api-status" class="status-badge">● Connecting…</div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN  —  two-column grid
+  ═══════════════════════════════════════════ -->
+  <main class="main-grid">
+
+    <!-- ── LEFT: FORM PANEL ───────────────────── -->
+    <section class="panel form-panel">
+
+      <!-- Title changes between "Add" and "Edit" mode -->
+      <h2 class="panel-title" id="form-title">➕ Add Student</h2>
+
+      <!-- Hidden: stores the ID of the student being edited -->
+      <input type="hidden" id="edit-id" />
+
+      <!-- Name -->
+      <div class="field">
+        <label for="inp-name">Full Name <span class="req">*</span></label>
+        <input type="text" id="inp-name" placeholder="e.g. Narendra Dedi" maxlength="120" autocomplete="off" />
+        <span class="field-err" id="err-name"></span>
+      </div>
+
+      <!-- Course -->
+      <div class="field">
+        <label for="inp-course">Course <span class="req">*</span></label>
+        <input type="text" id="inp-course" placeholder="e.g. B.Tech CSE" maxlength="120" autocomplete="off" />
+        <span class="field-err" id="err-course"></span>
+      </div>
+
+      <!-- Age -->
+      <div class="field">
+        <label for="inp-age">Age <span class="req">*</span></label>
+        <input type="number" id="inp-age" placeholder="e.g. 20" min="1" max="100" />
+        <span class="field-err" id="err-age"></span>
+      </div>
+
+      <!-- Joining Date
+           type="date" always gives value as "YYYY-MM-DD" — exactly what Flask expects -->
+      <div class="field">
+        <label for="inp-date">Joining Date <span class="req">*</span></label>
+        <input type="date" id="inp-date" />
+        <span class="field-err" id="err-date"></span>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="btn-row">
+        <button class="btn btn-primary" id="submit-btn" onclick="submitForm()">
+          ➕ Add Student
+        </button>
+        <button class="btn btn-ghost" id="cancel-btn" onclick="cancelEdit()" style="display:none;">
+          ✖ Cancel
+        </button>
+      </div>
+
+      <!-- Inline toast / feedback message -->
+      <div class="toast" id="toast"></div>
+
+      <!-- Stats strip -->
+      <div class="stats-strip">
+        <div class="stat">
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-lbl">Total</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <span class="stat-num" id="stat-courses">0</span>
+          <span class="stat-lbl">Courses</span>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <span class="stat-num" id="stat-avg">—</span>
+          <span class="stat-lbl">Avg Age</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── RIGHT: TABLE PANEL ─────────────────── -->
+    <section class="panel table-panel">
+
+      <div class="table-topbar">
+        <h2 class="panel-title">📋 All Students</h2>
+        <div class="table-controls">
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search name or course…"
+              oninput="filterStudents()"
+            />
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="loadStudents()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- Loading spinner -->
+      <div class="spinner-wrap" id="spinner">
+        <div class="spinner"></div>
+        <p>Loading…</p>
+      </div>
+
+      <!-- Table (injected by script.js) -->
+      <div class="table-scroll" id="table-wrap" style="display:none;">
+        <table id="students-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Course</th>
+              <th>Age</th>
+              <th>Joining Date</th>
+              <th>Added On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="students-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state" style="display:none;">
+        <span class="empty-icon">🎓</span>
+        <p>No students yet.</p>
+        <small>Add your first student using the form.</small>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    Student Management System &nbsp;·&nbsp; Flask + SQLAlchemy + SQLite
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
